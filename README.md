@@ -20,17 +20,16 @@
 ## 負荷試験
 サーバを起動してからアプリが立ち上がるまで数十分かかる
 
+### グローバルIP 確認方法
+```bash
+curl https://ifconfig.me
+```
+
 ### ベンチマーク方法
 ```bash
 cd /home/isucon/private_isu.git/benchmarker
 ./bin/benchmarker -u ./userdata -t http://{競技用インスタンスのIPアドレス}/
 ```
-
-### permission deniedの解消方法
-```bash
-sudo chmod 777 ファイル名
-```
-
 
 ### スロークエリログの設定方法
 - /etc/mysql/myswl.conf.d/mysqld.cnf
@@ -46,12 +45,45 @@ long_query_time = 0
 sudo systemctl restart mysql
 ```
 
+#### permission deniedの解消方法
+```bash
+sudo chmod 644 ファイル名
+```
+- 777 だとスロークエリログ吐かなくなるので注意
+
 ### スロークエリログの確認方法
 ```bash
 sudo mysqldumpslow /var/log/mysql/mysql-slow.log 
 ```
 
-### グローバルIP 確認方法
+### mysqlでログイン
 ```bash
-curl https://ifconfig.me
+sudo mysql -u root
 ```
+
+### データベース一覧確認
+```bash
+SHOW DATABASES;
+```
+
+### データベースの構造確認
+```bash
+SHOW CREATE TABLE <テーブル名>\G;
+```
+- ERROR 1049 (42000): Unknown database 'comments'が出る時
+```bash
+use isuconp;
+show tables; # 対象の表があるか確認
+```
+
+### クエリの実行動作を確認
+- EXPLAIN
+```bash
+EXPLAIN SELECT * FROM comments WHERE post_id = 9995 ORDER BY created_at DESC LIMIT 3\G
+```
+
+### post_idカラムにインデックスを付与
+```bash
+ALTER TABLE comments ADD INDEX post_id_idx(post_id);
+```
+- もう一度クエリの実行動作を確認
