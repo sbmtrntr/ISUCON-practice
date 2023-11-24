@@ -36,9 +36,9 @@ cd /home/isucon/private_isu.git/benchmarker
 - /etc/mysql/myswl.conf.d/mysqld.cnf
 ```bash
 [mysqld]
-slow_query_log = 1
-slow_query_log_file = /var/log/mysql/mysql-slow.log
-long_query_time = 0
+slow_query_log=1
+slow_query_log_file=/var/log/mysql/mysql-slow.log
+long_query_time=0
 ```
 
 - 設定変更したらmysqlを再起動する
@@ -53,6 +53,7 @@ sudo chmod 644 ファイル名
 ```
 - 777だとスロークエリログ吐かなくなるので注意
 - もっといいやり方ありそう
+  - sudo nano ファイルの方が楽
 
 #### 確認方法
 ```bash
